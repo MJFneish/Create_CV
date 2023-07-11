@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\cv_web_application.props" />
+</Project>

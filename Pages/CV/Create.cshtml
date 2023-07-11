@@ -1,0 +1,143 @@
+﻿@page
+@using cv_web_application.Models;
+
+@model Create
+@{
+    ViewData["Title"] = "CV page";
+}
+
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    .preview-image{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
+<h1 class="display-4">Create Your CV</h1>
+
+<div class="container">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-action="/" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="CV.FirstName" class="form-label"></label>
+            <input asp-for="CV.FirstName" class="form-control form-control-sm" value="Mohammad Jawad" />
+            <span asp-validation-for="CV.FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CV.LastName" class="form-label"></label>
+            <input asp-for="CV.LastName" class="form-control form-control-sm" value="Fneish" />
+            <span asp-validation-for="CV.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CV.BDay" class="form-label"></label>
+            <input asp-for="CV.BDay" class="form-control form-control-sm" />
+            <span asp-validation-for="CV.BDay" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CV.Nationality" class="form-label">Nationality</label>
+            <select asp-for="CV.Nationality" asp-items="Countries.CountryList" class="form-select form-select-sm text-black"></select>
+        </div>
+
+        <div class="container">
+            <label asp-for="CV.Gender" class="form-label"></label>
+            <div class="form-check">
+                <input type="radio" id="Male" asp-for="CV.Gender" value="Male" class="form-check-input" checked/>
+                <label for="Male" class="form-check-label">Male</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="Female" asp-for="CV.Gender" value="Female" class="form-check-input" />
+                <label for="Female" class="form-check-label">Female</label>
+            </div>
+        </div>
+        <hr />
+        <div class="container">
+            <label asp-for="CVModel.SkillsDictionary" class="form-check-label"></label>
+            @foreach (var skill in Model.CVModel.SkillsDictionary)
+            {
+                <div class="form-check">
+                    <input type="checkbox" id="@skill.Key" name="SkillsDictionary[@skill.Key]" @(skill.Value ? "checked" : "") class="form-check-input" />
+                    <label for="@skill.Key" class="form-check-label">@skill.Key</label>
+                </div>
+            }
+        </div>
+        <div class="mb-3">
+            <label asp-for="CV.Email" class="form-label"></label>
+            <input asp-for="CV.Email" class="form-control form-control-sm" value="fneishm123@gmail.com"/>
+            <span asp-validation-for="CV.Email" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3">
+            <label asp-for="CVModel.ConfirmEmail" class="form-label"></label>
+            <input asp-for="CVModel.ConfirmEmail" class="form-control form-control-sm" value="fneishm123@gmail.com" />
+            <span asp-validation-for="CVModel.ConfirmEmail" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CV.Password" class="form-label"></label>
+            <input type="password" asp-for="CV.Password" class="form-control form-control-sm" value="123123123"/>
+            <span asp-validation-for="CV.Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-5 mt-3 custom-file">
+            <div id="imagePreview">
+                 <h2>Your image</h2>
+            </div>
+            <div class="mb-5 custom-file mt-4">
+                <input type="file" asp-for="CVModel.Photo" class="form-file-input" id="fileInput" /><br />
+                <span asp-validation-for="CVModel.Photo " class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <input type="number" asp-for="CVModel.Verification.Nbr1" class="form-control" readonly />+<br />
+            <input type="number" asp-for="CVModel.Verification.Nbr2" class="form-control" readonly />=<br />
+            <input type="number" asp-for="CVModel.Verification.Nbr3" class="form-control" />
+            <span asp-validation-for="CVModel.Verification.Nbr3" class="text-danger"></span>
+        </div>
+
+        <button type="submit" id="myBtn" class="btn btn-primary align-content-center mb-5">Submit</button>
+
+    </form>
+</div>
+
+
+<script>
+    var fileInput = document.getElementById('fileInput');
+    var imagePreview = document.getElementById('imagePreview');
+
+    fileInput.addEventListener('change', function (event) {
+        var file = event.target.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('preview-image');
+                imagePreview.innerHTML = '';
+                imagePreview.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.innerHTML = '';
+        }
+    });
+</script>
